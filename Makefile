@@ -47,21 +47,21 @@ shellcheck:
 qa:
 	@echo "Running QA checks..."
 	@echo "→ Checking code with ruff..."
-	ruff check .
+	uv run ruff check .
 	@echo "→ Checking formatting..."
-	ruff format --check .
+	uv run ruff format --check .
 	@echo "→ Spell checking..."
-	codespell
+	uv run codespell
 	@echo "✓ All QA checks passed!"
 
 pytest:
 	@echo "Running tests..."
-	pytest tests/ --cov=enviroplus --cov-report=term-missing
+	uv run pytest tests/ --cov=enviroplus --cov-report=term-missing
 
 format:
 	@echo "Formatting code with ruff..."
-	ruff check --fix .
-	ruff format .
+	uv run ruff check --fix .
+	uv run ruff format .
 	@echo "✓ Code formatted!"
 
 nopost:
