@@ -296,7 +296,9 @@ EOF
         fi
 
         if command_exists rclone; then
-            print_info "rclone configuration saved. You can run 'rclone config' to modify."
+            print_success "rclone is ready"
+            print_info "No config file needed - sync script uses environment variables"
+            print_info "Test with: RCLONE_S3_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} RCLONE_S3_SECRET_ACCESS_KEY=*** RCLONE_S3_ENDPOINT=${STORAGE_ENDPOINT} RCLONE_S3_REGION=${STORAGE_REGION} rclone lsd :s3:${STORAGE_BUCKET}"
         fi
     fi
 

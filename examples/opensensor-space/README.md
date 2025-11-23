@@ -112,11 +112,7 @@ python3 -c "from uuid_utils import uuid7; print(uuid7())"
 
 ### 3. Configure rclone (for cloud sync)
 
-```bash
-rclone config
-```
-
-Follow the prompts to set up your storage provider (S3, Backblaze B2, Google Cloud, etc.).
+**No configuration needed!** The sync script uses environment variables from `config.env` - rclone will automatically use your credentials without any config file.
 
 ### 4. Test
 
@@ -151,6 +147,7 @@ Compared to AWS CLI:
 - ✅ Efficient delta syncs (only uploads changes)
 - ✅ Optional encryption
 - ✅ Better for Raspberry Pi
+- ✅ Modern environment variable support (no config files needed!)
 
 ### Bucket and Prefix Configuration
 
@@ -346,14 +343,22 @@ cat config.env
 ### Sync Fails
 
 ```bash
-# Test rclone connection
-rclone lsd s3remote:
+# Load config variables
+cd examples/opensensor-space
+source config.env
+
+# Test rclone connection with environment variables
+RCLONE_S3_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
+RCLONE_S3_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
+RCLONE_S3_ENDPOINT="${STORAGE_ENDPOINT}" \
+RCLONE_S3_REGION="${STORAGE_REGION}" \
+rclone lsd :s3:${STORAGE_BUCKET}
 
 # Dry run sync
-rclone sync ../../output/ s3remote:bucket/path --dry-run -v
+./sync_to_storage.sh  # Add --dry-run flag if needed
 
-# Check credentials
-rclone config show
+# Check your config.env credentials
+cat config.env | grep -E 'AWS_|STORAGE_'
 ```
 
 ### High Memory Usage

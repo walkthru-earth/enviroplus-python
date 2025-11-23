@@ -32,12 +32,7 @@ LOG_DIR="$PROJECT_DIR/logs"
 LOG_FILE="${LOG_DIR}/sync.log"
 ERROR_LOG="${LOG_DIR}/sync_error.log"
 
-# Rclone remote configuration name
-# Default to "s3remote" if not set in config
-RCLONE_REMOTE="${RCLONE_REMOTE:-s3remote}"
-
-# Build remote path from bucket and prefix
-# Format: remote:bucket/prefix
+# Check required storage configuration
 if [ -z "$STORAGE_BUCKET" ]; then
     echo "ERROR: STORAGE_BUCKET not set in config.env"
     exit 1
@@ -48,7 +43,17 @@ if [ -z "$STORAGE_PREFIX" ]; then
     exit 1
 fi
 
-REMOTE_PATH="${RCLONE_REMOTE}:${STORAGE_BUCKET}/${STORAGE_PREFIX}"
+# Set rclone environment variables for S3 authentication
+# This modern approach avoids needing a config file
+export RCLONE_S3_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
+export RCLONE_S3_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+export RCLONE_S3_REGION="${STORAGE_REGION:-us-west-2}"
+export RCLONE_S3_ENDPOINT="${STORAGE_ENDPOINT}"
+export RCLONE_S3_PROVIDER="Other"
+
+# Build remote path using on-the-fly backend syntax
+# Format: :s3:bucket/prefix (no config file needed!)
+REMOTE_PATH=":s3:${STORAGE_BUCKET}/${STORAGE_PREFIX}"
 
 # Create log directory if it doesn't exist
 mkdir -p "$LOG_DIR"
