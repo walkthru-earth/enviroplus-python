@@ -55,6 +55,11 @@ examples = [
     "paho-mqtt",
     "pillow"
 ]
+# Dependencies for opensensor-space data collection with DuckDB
+opensensor-space = [
+    "duckdb >= 1.4.2",
+    "python-dotenv >= 1.0.0"
+]
 
 [project.urls]
 GitHub = "https://www.github.com/pimoroni/enviroplus-python"

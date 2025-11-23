@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenSensor Space Storage Sync Timer
+Requires=sync_timer.service
+
+[Timer]
+# Run every 15 minutes
+OnBootSec=5min
+OnUnitActiveSec=15min
+
+[Install]
+WantedBy=timers.target

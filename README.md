@@ -111,6 +111,41 @@ source .venv/bin/activate
 pip install enviroplus
 ```
 
+### OpenSensor Space Data Collection
+
+Collect sensor data efficiently with DuckDB-powered edge processing. **Complete standalone setup with smart installer:**
+
+```bash
+# Navigate to opensensor-space directory
+cd examples/opensensor-space
+
+# Run the smart installer (interactive setup)
+./install.sh
+```
+
+The installer will:
+- ✓ Check and install UV package manager if needed
+- ✓ Install DuckDB 1.4.2 LTS and dependencies
+- ✓ Generate a unique UUID for your station
+- ✓ Configure cloud storage sync (optional)
+- ✓ Set up systemd services for automatic startup
+- ✓ Test your configuration
+
+Features:
+- **Modern DuckDB backend** - Memory-efficient data buffering with DuckDB 1.4.2 LTS
+- **15-minute batches** - Data collected at 5-second intervals, written every 15 minutes
+- **Hive-partitioned Parquet** - Industry-standard partitioned format (station/year/month/day/hour/minute)
+- **Snappy compression** - Optimized storage with ~60-90% size reduction
+- **Edge processing** - No cloud dependency, all processing happens on the Pi
+- **Lightweight rclone sync** - Optional automatic sync to S3, Backblaze B2, Google Cloud, etc.
+- **UUID-based station IDs** - Globally unique sensor station identification
+
+Data is stored locally in `output/station=UUID/year=YYYY/month=MM/day=DD/hour=HH/minute_bucket=MM/` with automatic Hive partitioning.
+
+**Configuration:** All settings (station UUID, bucket name, sync prefix, credentials) are stored in `examples/opensensor-space/config.env` and managed by the installer.
+
+For detailed documentation, see [examples/opensensor-space/README.md](examples/opensensor-space/README.md).
+
 ### Hardware Configuration (Older OS Versions Only)
 
 **Debian Trixie/Bookworm (2024+):** Hardware interfaces work by default - no configuration needed!
