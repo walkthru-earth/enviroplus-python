@@ -19,3 +19,7 @@ library/debian/
 .pytest_cache
 .tox
 .vscode/
+
+# UV virtual environment
+.venv/
+uv-requirements.lock

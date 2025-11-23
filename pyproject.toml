@@ -7,7 +7,7 @@ name = "enviroplus"
 dynamic = ["version", "readme"]
 description = "Enviro pHAT Plus environmental monitoring add-on for Raspberry Pi"
 license = {file = "LICENSE"}
-requires-python = ">= 3.7"
+requires-python = ">= 3.9"
 authors = [
     { name = "Philip Howard", email = "phil@pimoroni.com" },
 ]
@@ -24,11 +24,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development",
     "Topic :: Software Development :: Libraries",
@@ -42,6 +42,18 @@ dependencies = [
     "ltr559 >= 1.0.0",
     "st7735 >= 1.0.0",
     "ads1015 >= 1.0.0"
+]
+
+[project.optional-dependencies]
+# Dependencies for running example scripts
+examples = [
+    "fonts",
+    "font-roboto",
+    "astral",
+    "pytz",
+    "sounddevice",
+    "paho-mqtt",
+    "pillow"
 ]
 
 [project.urls]
@@ -117,6 +129,26 @@ ignore = [
     '.coveragerc',
     'requirements-dev.txt'
 ]
+
+[dependency-groups]
+# PEP 735 dependency groups (UV, pip 23.1+)
+dev = [
+    "check-manifest",
+    "ruff",
+    "codespell",
+    "isort",
+    "twine",
+    "hatch",
+    "hatch-fancy-pypi-readme",
+    "tox",
+    "pdoc"
+]
+
+[tool.uv]
+# UV-specific configuration for modern package management
+
+[tool.uv.sources]
+# All dependencies use PyPI by default
 
 [tool.pimoroni]
 apt_packages = [
