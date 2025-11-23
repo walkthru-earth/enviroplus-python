@@ -140,7 +140,7 @@ Features:
 - **Lightweight rclone sync** - Optional automatic sync to S3, Backblaze B2, Google Cloud, etc.
 - **UUID v7 station IDs** - Time-ordered globally unique identifiers (better for databases)
 
-Data is stored locally in `output/station=UUID/year=YYYY/month=MM/day=DD/hour=HH/minute_bucket=MM/` with automatic Hive partitioning.
+Data is stored locally in `output/station=UUID/year=YYYY/month=MM/day=DD/hour=HH/data_HHMM.parquet` with automatic Hive partitioning.
 
 **Configuration:** All settings (station UUID, bucket name, sync prefix, credentials) are stored in `examples/opensensor-space/config.env` and managed by the installer.
 

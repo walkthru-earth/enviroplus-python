@@ -238,27 +238,33 @@ output/
         └── month=01/
             └── day=23/
                 └── hour=14/
-                    └── minute_bucket=0/
-                        ├── data_0.parquet
-                        └── data_1.parquet
+                    ├── data_1400.parquet  (14:00-14:14)
+                    ├── data_1415.parquet  (14:15-14:29)
+                    ├── data_1430.parquet  (14:30-14:44)
+                    └── data_1445.parquet  (14:45-14:59)
 ```
 
 ### Partition Structure
 
-- **station**: Your unique UUID
-- **year/month/day/hour**: Timestamp components
-- **minute_bucket**: 15-minute intervals (0, 15, 30, 45)
+- **station**: Your unique UUID v7
+- **year/month/day/hour**: Timestamp components (Hive partitioning)
+- **filename**: `data_HHMM.parquet` where HHMM indicates the 15-minute interval (00, 15, 30, 45)
 
 This structure enables efficient querying:
 
 ```python
 import duckdb
 
-# Query specific time range
+# Query specific time range (partition pushdown is automatic)
 duckdb.sql("""
     SELECT * FROM 'output/**/*.parquet'
     WHERE year = 2025 AND month = 1 AND day = 23
     AND hour = 14
+""").show()
+
+# Query specific 15-minute interval using filename pattern
+duckdb.sql("""
+    SELECT * FROM 'output/**/hour=14/data_1415.parquet'
 """).show()
 ```
 
