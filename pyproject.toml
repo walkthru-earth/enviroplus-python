@@ -59,7 +59,8 @@ examples = [
 opensensor-space = [
     "duckdb >= 1.4.2",
     "python-dotenv >= 1.2.1",
-    "uuid-utils >= 0.11.1"
+    "uuid-utils >= 0.11.1",
+    "pandas >= 2.3.3"
 ]
 
 [project.urls]

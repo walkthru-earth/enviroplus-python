@@ -12,6 +12,7 @@ import duckdb
 import os
 import sys
 from pathlib import Path
+import pandas as pd
 
 # Load configuration from config.env
 try:
@@ -230,6 +231,9 @@ def main():
                 output_base = Path(OUTPUT_DIR)
                 output_base.mkdir(parents=True, exist_ok=True)
 
+                # Convert batch_data list to DataFrame - DuckDB can query DataFrames directly
+                batch_df = pd.DataFrame(batch_data)
+
                 # Use DuckDB's COPY with PARTITION_BY for efficient partitioned writes
                 # Partition by hour, include minute in filename
                 # This creates: station=X/year=Y/month=M/day=D/hour=H/data_HHMM.parquet
@@ -265,7 +269,7 @@ def main():
                             month(timestamp::TIMESTAMP) AS month,
                             day(timestamp::TIMESTAMP) AS day,
                             hour(timestamp::TIMESTAMP) AS hour
-                        FROM batch_data
+                        FROM batch_df
                     ) TO '{str(output_base)}' (
                         FORMAT PARQUET,
                         PARTITION_BY (station, year, month, day, hour),
