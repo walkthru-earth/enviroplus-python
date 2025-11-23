@@ -170,7 +170,7 @@ uv pip install enviroplus-community
 enviroplus-examples
 enviroplus-setup --check
 
-# Try importing
+# Try importing (should work with Python 3.9-3.13)
 python -c "import enviroplus; print(enviroplus.__version__)"
 ```
 

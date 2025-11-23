@@ -254,7 +254,7 @@ make build
 
 - **Hardware:** Raspberry Pi with Enviro+ or Enviro Mini pHAT
 - **OS:** Raspberry Pi OS (Debian Bookworm or later recommended)
-- **Python:** 3.9+
+- **Python:** 3.9 - 3.13 (fully tested across all versions)
 - **System packages:** Automatically installed by `enviroplus-setup`
 
 **Supported boards:**

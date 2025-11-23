@@ -62,14 +62,14 @@ uv run pytest --cov=enviroplus
 ### Quality Checks
 
 ```bash
-# Run all QA checks
+# Run all QA checks (ruff + codespell)
 make qa
 
 # Individual checks
-make check          # Basic integrity checks
+make check          # Basic integrity checks (whitespace, line endings, changelog)
 make shellcheck     # Lint shell scripts
-ruff check .        # Python linting
-codespell          # Spell checking
+uv run ruff check . # Python linting
+uv run codespell    # Spell checking
 ```
 
 ### Building Package
@@ -209,17 +209,21 @@ pytest tests/ --hardware
 ## 📝 Code Style
 
 We use:
-- **ruff** for linting and formatting
-- **isort** for import sorting
+- **ruff** for linting, formatting, and import sorting (replaces Black, isort, flake8)
 - **codespell** for spell checking
 
 ```bash
 # Auto-fix issues
+make format
+# or manually:
 ruff check --fix .
-isort .
+ruff format .
 
 # Check only
+make qa
+# or manually:
 ruff check .
+ruff format --check .
 codespell
 ```
 

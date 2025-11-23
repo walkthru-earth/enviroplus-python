@@ -1,6 +1,15 @@
 1.0.2
 -----
 
+### Community Edition Updates
+* **Package renamed** to `enviroplus-community` for PyPI distribution
+* **Python 3.12 and 3.13** support added and fully tested
+* **Modern packaging** with UV package manager and PEP 735 dependency groups
+* **New tools**: `enviroplus-setup` for hardware configuration, `enviroplus-examples` for examples management
+* **CI/CD modernization**: GitHub Actions with ruff, UV, and Trusted Publishers for PyPI
+* **Code quality**: Migrated to ruff for linting/formatting (replaces black, isort, flake8)
+* **Documentation**: Comprehensive guides for development and PyPI publishing
+* **opensensor.space integration**: Cloud-native platform for open sensor data
 * README.md: Update install instructions
 * Fix installer to enable serial
 * Fix gas sensor heater pin
