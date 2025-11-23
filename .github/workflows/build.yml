@@ -26,9 +26,15 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
       - name: Install Dependencies
         run: |
-          make dev-deps
+          uv tool install hatch
+          uv sync --group dev
 
       - name: Build Packages
         run: |
