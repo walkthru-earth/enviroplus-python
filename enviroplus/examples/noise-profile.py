@@ -13,14 +13,7 @@ Press Ctrl+C to exit!
 
 noise = Noise()
 
-disp = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+disp = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 disp.begin()
 

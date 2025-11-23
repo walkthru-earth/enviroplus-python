@@ -6,10 +6,7 @@ import time
 from bme280 import BME280
 from smbus2 import SMBus
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info("""compensated-temperature.py - Use the CPU temperature
 to compensate temperature readings from the BME280 sensor.

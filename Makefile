@@ -12,15 +12,15 @@ endif
 	@echo "Usage: make <target>, where target is one of:\n"
 	@echo "dev-install:  install the library locally for development"
 	@echo "dev-deps:     install Python dev dependencies with UV"
-	@echo "check:        perform basic integrity checks on the codebase"
-	@echo "shellcheck:   lint shell scripts"
-	@echo "qa:           run linting and package QA"
+	@echo "format:       format code with ruff (auto-fix)"
+	@echo "qa:           run QA checks (ruff + codespell)"
 	@echo "pytest:       run Python test fixtures"
+	@echo "check:        run basic integrity checks"
+	@echo "shellcheck:   lint shell scripts"
 	@echo "clean:        clean Python build and dist directories"
 	@echo "build:        build Python distribution files"
-	@echo "testdeploy:   build and upload to test PyPi (legacy)"
-	@echo "deploy:       build and upload to PyPi (legacy - use GitHub Actions instead)"
 	@echo "tag:          tag the repository with the current version\n"
+	@echo "Note: Use GitHub Actions for PyPI deployment (see PYPI_PUBLISHING.md)\n"
 
 version:
 	@hatch version
@@ -45,10 +45,24 @@ shellcheck:
 	@shellcheck check.sh 2>/dev/null || echo "⚠ shellcheck not installed (optional)"
 
 qa:
-	tox -e qa
+	@echo "Running QA checks..."
+	@echo "→ Checking code with ruff..."
+	ruff check .
+	@echo "→ Checking formatting..."
+	ruff format --check .
+	@echo "→ Spell checking..."
+	codespell
+	@echo "✓ All QA checks passed!"
 
 pytest:
-	tox -e py
+	@echo "Running tests..."
+	pytest tests/ --cov=enviroplus --cov-report=term-missing
+
+format:
+	@echo "Formatting code with ruff..."
+	ruff check --fix .
+	ruff format .
+	@echo "✓ Code formatted!"
 
 nopost:
 	@bash check.sh --nopost

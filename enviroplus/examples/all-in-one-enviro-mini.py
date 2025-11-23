@@ -10,6 +10,7 @@ import st7735
 try:
     # Transitional fix for breaking change in LTR559
     from ltr559 import LTR559
+
     ltr559 = LTR559()
 except ImportError:
     import ltr559
@@ -21,10 +22,7 @@ from bme280 import BME280
 from fonts.ttf import RobotoMedium as UserFont
 from PIL import Image, ImageDraw, ImageFont
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info("""all-in-one.py - Displays readings from all of Enviro plus" sensors
 Press Ctrl+C to exit!
@@ -34,14 +32,7 @@ Press Ctrl+C to exit!
 bme280 = BME280()
 
 # Create ST7735 LCD display class
-st7735 = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+st7735 = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 # Initialize display
 st7735.begin()
@@ -92,7 +83,7 @@ def display_text(variable, data, unit):
 def get_cpu_temperature():
     process = Popen(["vcgencmd", "measure_temp"], stdout=PIPE, universal_newlines=True)
     output, _error = process.communicate()
-    return float(output[output.index("=") + 1:output.rindex("'")])
+    return float(output[output.index("=") + 1 : output.rindex("'")])
 
 
 # Tuning factor for compensation. Decrease this number to adjust the
@@ -107,10 +98,7 @@ last_page = 0
 light = 1
 
 # Create a values dict to store the data
-variables = ["temperature",
-             "pressure",
-             "humidity",
-             "light"]
+variables = ["temperature", "pressure", "humidity", "light"]
 
 values = {}
 

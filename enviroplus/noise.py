@@ -75,11 +75,4 @@ class Noise:
         return amp_low, amp_mid, amp_high, amp_total
 
     def _record(self):
-        return sounddevice.rec(
-            int(self.duration * self.sample_rate),
-            device="adau7002",
-            samplerate=self.sample_rate,
-            blocking=True,
-            channels=1,
-            dtype="float64"
-        )
+        return sounddevice.rec(int(self.duration * self.sample_rate), device="adau7002", samplerate=self.sample_rate, blocking=True, channels=1, dtype="float64")

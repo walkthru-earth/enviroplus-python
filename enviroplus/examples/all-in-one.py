@@ -9,6 +9,7 @@ import st7735
 try:
     # Transitional fix for breaking change in LTR559
     from ltr559 import LTR559
+
     ltr559 = LTR559()
 except ImportError:
     import ltr559
@@ -23,10 +24,7 @@ from pms5003 import ReadTimeoutError as pmsReadTimeoutError
 
 from enviroplus import gas
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info("""all-in-one.py - Displays readings from all of Enviro plus' sensors
 
@@ -41,14 +39,7 @@ bme280 = BME280()
 pms5003 = PMS5003()
 
 # Create ST7735 LCD display class
-st7735 = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+st7735 = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 # Initialize display
 st7735.begin()
@@ -109,21 +100,12 @@ factor = 2.25
 cpu_temps = [get_cpu_temperature()] * 5
 
 delay = 0.5  # Debounce the proximity tap
-mode = 0     # The starting mode
+mode = 0  # The starting mode
 last_page = 0
 light = 1
 
 # Create a values dict to store the data
-variables = ["temperature",
-             "pressure",
-             "humidity",
-             "light",
-             "oxidised",
-             "reduced",
-             "nh3",
-             "pm1",
-             "pm25",
-             "pm10"]
+variables = ["temperature", "pressure", "humidity", "light", "oxidised", "reduced", "nh3", "pm1", "pm25", "pm10"]
 
 values = {}
 

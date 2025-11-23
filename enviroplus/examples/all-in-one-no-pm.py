@@ -10,6 +10,7 @@ import st7735
 try:
     # Transitional fix for breaking change in LTR559
     from ltr559 import LTR559
+
     ltr559 = LTR559()
 except ImportError:
     import ltr559
@@ -22,10 +23,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from enviroplus import gas
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info("""all-in-one.py - Displays readings from all of Enviro plus' sensors
 Press Ctrl+C to exit!
@@ -35,14 +33,7 @@ Press Ctrl+C to exit!
 bme280 = BME280()
 
 # Create ST7735 LCD display class
-st7735 = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+st7735 = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 # Initialize display
 st7735.begin()
@@ -109,13 +100,7 @@ last_page = 0
 light = 1
 
 # Create a values dict to store the data
-variables = ["temperature",
-             "pressure",
-             "humidity",
-             "light",
-             "oxidised",
-             "reduced",
-             "nh3"]
+variables = ["temperature", "pressure", "humidity", "light", "oxidised", "reduced", "nh3"]
 
 values = {}
 

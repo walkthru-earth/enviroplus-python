@@ -16,6 +16,7 @@ from enviroplus import gas
 try:
     # Transitional fix for breaking change in LTR559
     from ltr559 import LTR559
+
     ltr559 = LTR559()
 except ImportError:
     import ltr559
@@ -44,10 +45,7 @@ Press Ctrl+C to exit!
 
 """)
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info(""" """)
 bus = SMBus(1)
@@ -60,26 +58,8 @@ bme280 = BME280(i2c_dev=bus)
 pms5003 = PMS5003()
 
 # Create a values dict to store the data
-variables = ["temperature",
-             "pressure",
-             "humidity",
-             "light",
-             "oxidised",
-             "reduced",
-             "nh3",
-             "pm1",
-             "pm25",
-             "pm10"]
-units = ["C",
-         "hPa",
-         "%",
-         "Lux",
-         "kO",
-         "kO",
-         "kO",
-         "ug/m3",
-         "ug/m3",
-         "ug/m3"]
+variables = ["temperature", "pressure", "humidity", "light", "oxidised", "reduced", "nh3", "pm1", "pm25", "pm10"]
+units = ["C", "hPa", "%", "Lux", "kO", "kO", "kO", "ug/m3", "ug/m3", "ug/m3"]
 
 # Define your own warning limits
 # The limits definition follows the order of the variables array
@@ -94,23 +74,27 @@ units = ["C",
 # with NO WARRANTY. The authors of this example code claim
 # NO RESPONSIBILITY if reliance on the following values or this
 # code in general leads to ANY DAMAGES or DEATH.
-limits = [[4, 18, 25, 35],
-          [250, 650, 1013.25, 1015],
-          [20, 30, 60, 70],
-          [-1, -1, 30000, 100000],
-          [-1, -1, 40, 50],
-          [-1, -1, 450, 550],
-          [-1, -1, 200, 300],
-          [-1, -1, 50, 100],
-          [-1, -1, 50, 100],
-          [-1, -1, 50, 100]]
+limits = [
+    [4, 18, 25, 35],
+    [250, 650, 1013.25, 1015],
+    [20, 30, 60, 70],
+    [-1, -1, 30000, 100000],
+    [-1, -1, 40, 50],
+    [-1, -1, 450, 550],
+    [-1, -1, 200, 300],
+    [-1, -1, 50, 100],
+    [-1, -1, 50, 100],
+    [-1, -1, 50, 100],
+]
 
 # RGB palette for values on the combined screen
-palette = [(0, 0, 255),           # Dangerously Low
-           (0, 255, 255),         # Low
-           (0, 255, 0),           # Normal
-           (255, 255, 0),         # High
-           (255, 0, 0)]           # Dangerously High
+palette = [
+    (0, 0, 255),  # Dangerously Low
+    (0, 255, 255),  # Low
+    (0, 255, 0),  # Normal
+    (255, 255, 0),  # High
+    (255, 0, 0),
+]  # Dangerously High
 values_lcd = {}
 
 
@@ -127,10 +111,9 @@ def read_values(comp_temp, mod_press, raw_humid, raw_pm25, raw_pm10):
 
 # Get CPU temperature to use for compensation
 def get_cpu_temperature():
-    process = Popen(["vcgencmd", "measure_temp"],
-                    stdout=PIPE, universal_newlines=True)
+    process = Popen(["vcgencmd", "measure_temp"], stdout=PIPE, universal_newlines=True)
     output, _error = process.communicate()
-    return float(output[output.index("=") + 1:output.rindex("'")])
+    return float(output[output.index("=") + 1 : output.rindex("'")])
 
 
 # Get Raspberry Pi serial number to use as ID
@@ -150,14 +133,7 @@ def check_wifi():
 
 
 # Create ST7735 LCD display class
-st7735 = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+st7735 = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 # Initialize display
 st7735.begin()
@@ -198,8 +174,7 @@ def display_text(variable, data, unit):
     # Scale the values for the variable between 0 and 1
     vmin = min(values_lcd[variable])
     vmax = max(values_lcd[variable])
-    colours = [(v - vmin + 1) / (vmax - vmin + 1)
-               for v in values_lcd[variable]]
+    colours = [(v - vmin + 1) / (vmax - vmin + 1) for v in values_lcd[variable]]
     # Format the variable name and value
     message = f"{variable[:4]}: {data:.1f} {unit}"
     logging.info(message)
@@ -207,17 +182,16 @@ def display_text(variable, data, unit):
     for i in range(len(colours)):
         # Convert the values to colours from red to blue
         colour = (1.0 - colours[i]) * 0.6
-        r, g, b = [int(x * 255.0)
-                   for x in colorsys.hsv_to_rgb(colour, 1.0, 1.0)]
+        r, g, b = [int(x * 255.0) for x in colorsys.hsv_to_rgb(colour, 1.0, 1.0)]
         # Draw a 1-pixel wide rectangle of colour
         draw.rectangle((i, top_pos, i + 1, HEIGHT), (r, g, b))
         # Draw a line graph in black
-        line_y = HEIGHT - \
-            (top_pos + (colours[i] * (HEIGHT - top_pos))) + top_pos
+        line_y = HEIGHT - (top_pos + (colours[i] * (HEIGHT - top_pos))) + top_pos
         draw.rectangle((i, line_y, i + 1, line_y + 1), (0, 0, 0))
     # Write the text at the top in black
     draw.text((0, 0), message, font=font, fill=(0, 0, 0))
     st7735.display(img)
+
 
 # Displays all the text on the 0.96" LCD
 
@@ -225,7 +199,7 @@ def display_text(variable, data, unit):
 def display_everything():
     draw.rectangle((0, 0, WIDTH, HEIGHT), (0, 0, 0))
     column_count = 2
-    row_count = (len(variables) / column_count)
+    row_count = len(variables) / column_count
     for i in range(len(variables)):
         variable = variables[i]
         data_value = values_lcd[variable][-1]
@@ -246,37 +220,19 @@ def send_to_sensorcommunity(values, id):
     pm_values = dict(i for i in values.items() if i[0].startswith("P"))
     temp_values = dict(i for i in values.items() if not i[0].startswith("P"))
 
-    pm_values_json = [{"value_type": key, "value": val}
-                      for key, val in pm_values.items()]
-    temp_values_json = [{"value_type": key, "value": val}
-                        for key, val in temp_values.items()]
+    pm_values_json = [{"value_type": key, "value": val} for key, val in pm_values.items()]
+    temp_values_json = [{"value_type": key, "value": val} for key, val in temp_values.items()]
 
     resp_1 = requests.post(
         "https://api.sensor.community/v1/push-sensor-data/",
-        json={
-            "software_version": "enviro-plus 1.0.0",
-            "sensordatavalues": pm_values_json
-        },
-        headers={
-            "X-PIN": "1",
-            "X-Sensor": id,
-            "Content-Type": "application/json",
-            "cache-control": "no-cache"
-        }
+        json={"software_version": "enviro-plus 1.0.0", "sensordatavalues": pm_values_json},
+        headers={"X-PIN": "1", "X-Sensor": id, "Content-Type": "application/json", "cache-control": "no-cache"},
     )
 
     resp_2 = requests.post(
         "https://api.sensor.community/v1/push-sensor-data/",
-        json={
-            "software_version": "enviro-plus 1.0.0",
-            "sensordatavalues": temp_values_json
-        },
-        headers={
-            "X-PIN": "11",
-            "X-Sensor": id,
-            "Content-Type": "application/json",
-            "cache-control": "no-cache"
-        }
+        json={"software_version": "enviro-plus 1.0.0", "sensordatavalues": temp_values_json},
+        headers={"X-PIN": "11", "X-Sensor": id, "Content-Type": "application/json", "cache-control": "no-cache"},
     )
 
     if resp_1.ok and resp_2.ok:
@@ -294,7 +250,7 @@ id = "raspi-" + get_serial_number()
 
 # Added for state
 delay = 0.5  # Debounce the proximity tap
-mode = 10     # The starting mode
+mode = 10  # The starting mode
 last_page = 0
 light = 1
 
@@ -344,8 +300,7 @@ while True:
             raw_pm10 = pm_values.pm_ug_per_m3(10)
 
         if time_since_update > 145:
-            values = read_values(comp_temp, raw_press*100,
-                                 raw_humid, raw_pm25, raw_pm10)
+            values = read_values(comp_temp, raw_press * 100, raw_humid, raw_pm25, raw_pm10)
             resp = send_to_sensorcommunity(values, id)
             update_time = curtime
             status = "ok" if resp else "failed"

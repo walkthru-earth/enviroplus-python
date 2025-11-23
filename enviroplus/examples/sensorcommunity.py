@@ -12,10 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 from pms5003 import PMS5003, ChecksumMismatchError, ReadTimeoutError
 from smbus2 import SMBus
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info("""sensorcommunity.py - Reads temperature, pressure, humidity,
 PM2.5, and PM10 from Enviro plus and sends data to Sensor.Community,
@@ -37,14 +34,7 @@ bus = SMBus(1)
 bme280 = BME280(i2c_dev=bus)
 
 # Create LCD instance
-disp = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+disp = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 # Initialize display
 disp.begin()
@@ -66,7 +56,7 @@ def read_values():
         pm_values = pms5003.read()
         values["P2"] = str(pm_values.pm_ug_per_m3(2.5))
         values["P1"] = str(pm_values.pm_ug_per_m3(10))
-    except(ReadTimeoutError, ChecksumMismatchError):
+    except (ReadTimeoutError, ChecksumMismatchError):
         logging.info("Failed to read PMS5003. Resetting and retrying.")
         pms5003.reset()
         pm_values = pms5003.read()
@@ -131,17 +121,9 @@ def send_to_sensorcommunity(values, id):
     try:
         resp_pm = requests.post(
             "https://api.sensor.community/v1/push-sensor-data/",
-            json={
-                "software_version": "enviro-plus 1.0.0",
-                "sensordatavalues": pm_values_json
-            },
-            headers={
-                "X-PIN": "1",
-                "X-Sensor": id,
-                "Content-Type": "application/json",
-                "cache-control": "no-cache"
-            },
-            timeout=5
+            json={"software_version": "enviro-plus 1.0.0", "sensordatavalues": pm_values_json},
+            headers={"X-PIN": "1", "X-Sensor": id, "Content-Type": "application/json", "cache-control": "no-cache"},
+            timeout=5,
         )
     except requests.exceptions.ConnectionError as e:
         logging.warning(f"Sensor.Community PM Connection Error: {e}")
@@ -153,17 +135,9 @@ def send_to_sensorcommunity(values, id):
     try:
         resp_bmp = requests.post(
             "https://api.sensor.community/v1/push-sensor-data/",
-            json={
-                "software_version": "enviro-plus 1.0.0",
-                "sensordatavalues": temp_values_json
-            },
-            headers={
-                "X-PIN": "11",
-                "X-Sensor": id,
-                "Content-Type": "application/json",
-                "cache-control": "no-cache"
-            },
-            timeout=5
+            json={"software_version": "enviro-plus 1.0.0", "sensordatavalues": temp_values_json},
+            headers={"X-PIN": "11", "X-Sensor": id, "Content-Type": "application/json", "cache-control": "no-cache"},
+            timeout=5,
         )
     except requests.exceptions.ConnectionError as e:
         logging.warning(f"Sensor.Community Climate Connection Error: {e}")

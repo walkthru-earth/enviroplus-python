@@ -9,6 +9,7 @@ import st7735
 try:
     # Transitional fix for breaking change in LTR559
     from ltr559 import LTR559
+
     ltr559 = LTR559()
 except ImportError:
     import ltr559
@@ -25,10 +26,7 @@ from pms5003 import SerialTimeoutError
 
 from enviroplus import gas
 
-logging.basicConfig(
-    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
-    level=logging.INFO,
-    datefmt="%Y-%m-%d %H:%M:%S")
+logging.basicConfig(format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s", level=logging.INFO, datefmt="%Y-%m-%d %H:%M:%S")
 
 logging.info("""combined.py - Displays readings from all of Enviro plus' sensors
 
@@ -44,14 +42,7 @@ pms5003 = PMS5003()
 time.sleep(1.0)
 
 # Create ST7735 LCD display class
-st7735 = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+st7735 = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 # Initialize display
 st7735.begin()
@@ -75,27 +66,9 @@ message = ""
 top_pos = 25
 
 # Create a values dict to store the data
-variables = ["temperature",
-             "pressure",
-             "humidity",
-             "light",
-             "oxidised",
-             "reduced",
-             "nh3",
-             "pm1",
-             "pm25",
-             "pm10"]
+variables = ["temperature", "pressure", "humidity", "light", "oxidised", "reduced", "nh3", "pm1", "pm25", "pm10"]
 
-units = ["C",
-         "hPa",
-         "%",
-         "Lux",
-         "kO",
-         "kO",
-         "kO",
-         "ug/m3",
-         "ug/m3",
-         "ug/m3"]
+units = ["C", "hPa", "%", "Lux", "kO", "kO", "kO", "ug/m3", "ug/m3", "ug/m3"]
 
 # Define your own warning limits
 # The limits definition follows the order of the variables array
@@ -110,23 +83,27 @@ units = ["C",
 # with NO WARRANTY. The authors of this example code claim
 # NO RESPONSIBILITY if reliance on the following values or this
 # code in general leads to ANY DAMAGES or DEATH.
-limits = [[4, 18, 28, 35],
-          [250, 650, 1013.25, 1015],
-          [20, 30, 60, 70],
-          [-1, -1, 30000, 100000],
-          [-1, -1, 40, 50],
-          [-1, -1, 450, 550],
-          [-1, -1, 200, 300],
-          [-1, -1, 50, 100],
-          [-1, -1, 50, 100],
-          [-1, -1, 50, 100]]
+limits = [
+    [4, 18, 28, 35],
+    [250, 650, 1013.25, 1015],
+    [20, 30, 60, 70],
+    [-1, -1, 30000, 100000],
+    [-1, -1, 40, 50],
+    [-1, -1, 450, 550],
+    [-1, -1, 200, 300],
+    [-1, -1, 50, 100],
+    [-1, -1, 50, 100],
+    [-1, -1, 50, 100],
+]
 
 # RGB palette for values on the combined screen
-palette = [(0, 0, 255),           # Dangerously Low
-           (0, 255, 255),         # Low
-           (0, 255, 0),           # Normal
-           (255, 255, 0),         # High
-           (255, 0, 0)]           # Dangerously High
+palette = [
+    (0, 0, 255),  # Dangerously Low
+    (0, 255, 255),  # Low
+    (0, 255, 0),  # Normal
+    (255, 255, 0),  # High
+    (255, 0, 0),
+]  # Dangerously High
 
 values = {}
 
@@ -171,7 +148,7 @@ def save_data(idx, data):
 def display_everything():
     draw.rectangle((0, 0, WIDTH, HEIGHT), (0, 0, 0))
     column_count = 2
-    row_count = (len(variables) / column_count)
+    row_count = len(variables) / column_count
     for i in range(len(variables)):
         variable = variables[i]
         data_value = values[variable][-1]
@@ -192,7 +169,7 @@ def display_everything():
 def get_cpu_temperature():
     process = Popen(["vcgencmd", "measure_temp"], stdout=PIPE, universal_newlines=True)
     output, _error = process.communicate()
-    return float(output[output.index("=") + 1:output.rindex("'")])
+    return float(output[output.index("=") + 1 : output.rindex("'")])
 
 
 def main():
@@ -203,7 +180,7 @@ def main():
     cpu_temps = [get_cpu_temperature()] * 5
 
     delay = 0.5  # Debounce the proximity tap
-    mode = 10    # The starting mode
+    mode = 10  # The starting mode
     last_page = 0
 
     for v in variables:
@@ -217,7 +194,7 @@ def main():
             # If the proximity crosses the threshold, toggle the mode
             if proximity > 1500 and time.time() - last_page > delay:
                 mode += 1
-                mode %= (len(variables) + 1)
+                mode %= len(variables) + 1
                 last_page = time.time()
 
             # One mode for each variable

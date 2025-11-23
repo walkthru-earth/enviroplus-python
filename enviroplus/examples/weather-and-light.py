@@ -39,8 +39,8 @@ def circle_coordinates(x, y, radius):
 
 def map_colour(x, centre, start_hue, end_hue, day):
     """Given an x coordinate and a centre point, a start and end hue (in degrees),
-       and a Boolean for day or night (day is True, night False), calculate a colour
-       hue representing the "colour" of that time of day."""
+    and a Boolean for day or night (day is True, night False), calculate a colour
+    hue representing the "colour" of that time of day."""
 
     start_hue = start_hue / 360  # Rescale to between 0 and 1
     end_hue = end_hue / 360
@@ -77,7 +77,7 @@ def x_from_sun_moon_time(progress, period, x_range):
 
 def sun_moon_time(city_name, time_zone):
     """Calculate the progress through the current sun/moon period (i.e day or
-       night) from the last sunrise or sunset, given a datetime object "t"."""
+    night) from the last sunrise or sunset, given a datetime object "t"."""
 
     city = lookup(city_name, database())
 
@@ -128,7 +128,7 @@ def sun_moon_time(city_name, time_zone):
 
 def draw_background(progress, period, day):
     """Given an amount of progress through the day or night, draw the
-       background colour and overlay a blurred sun/moon."""
+    background colour and overlay a blurred sun/moon."""
 
     # x-coordinate for sun/moon
     x = x_from_sun_moon_time(progress, period, WIDTH)
@@ -288,14 +288,7 @@ def describe_light(light):
 
 
 # Initialise the LCD
-disp = st7735.ST7735(
-    port=0,
-    cs=1,
-    dc="GPIO9",
-    backlight="GPIO12",
-    rotation=270,
-    spi_speed_hz=10000000
-)
+disp = st7735.ST7735(port=0, cs=1, dc="GPIO9", backlight="GPIO12", rotation=270, spi_speed_hz=10000000)
 
 disp.begin()
 

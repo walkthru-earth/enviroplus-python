@@ -160,14 +160,14 @@ ignore = [
 [dependency-groups]
 # PEP 735 dependency groups (UV, pip 23.1+)
 dev = [
-    "check-manifest",
+    "pytest",
+    "pytest-cov",
     "ruff",
     "codespell",
-    "isort",
+    "check-manifest",
     "twine",
     "hatch",
     "hatch-fancy-pypi-readme",
-    "tox",
     "pdoc"
 ]
 

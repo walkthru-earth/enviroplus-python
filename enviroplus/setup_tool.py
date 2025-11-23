@@ -23,12 +23,13 @@ from pathlib import Path
 
 class Colors:
     """ANSI color codes for terminal output"""
-    GREEN = '\033[0;32m'
-    CYAN = '\033[0;36m'
-    RED = '\033[0;31m'
-    YELLOW = '\033[0;33m'
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
+
+    GREEN = "\033[0;32m"
+    CYAN = "\033[0;36m"
+    RED = "\033[0;31m"
+    YELLOW = "\033[0;33m"
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
 
 
 def success(msg):
@@ -65,19 +66,9 @@ def run_command(cmd, check=False, capture=True):
     """
     try:
         if capture:
-            result = subprocess.run(
-                cmd,
-                shell=isinstance(cmd, str),
-                capture_output=True,
-                text=True,
-                check=check
-            )
+            result = subprocess.run(cmd, shell=isinstance(cmd, str), capture_output=True, text=True, check=check)
         else:
-            result = subprocess.run(
-                cmd,
-                shell=isinstance(cmd, str),
-                check=check
-            )
+            result = subprocess.run(cmd, shell=isinstance(cmd, str), check=check)
         return result
     except subprocess.CalledProcessError as e:
         if check:
@@ -93,9 +84,9 @@ def is_root():
 def is_raspberry_pi():
     """Check if running on Raspberry Pi"""
     try:
-        with open('/proc/cpuinfo', 'r') as f:
+        with open("/proc/cpuinfo", "r") as f:
             cpuinfo = f.read()
-            return 'Raspberry Pi' in cpuinfo or 'BCM' in cpuinfo
+            return "Raspberry Pi" in cpuinfo or "BCM" in cpuinfo
     except FileNotFoundError:
         return False
 
@@ -103,20 +94,20 @@ def is_raspberry_pi():
 def get_os_info():
     """Get OS and distribution information"""
     info = {
-        'system': platform.system(),
-        'machine': platform.machine(),
-        'python_version': platform.python_version(),
+        "system": platform.system(),
+        "machine": platform.machine(),
+        "python_version": platform.python_version(),
     }
 
     # Try to get distribution info
     try:
-        with open('/etc/os-release', 'r') as f:
+        with open("/etc/os-release", "r") as f:
             for line in f:
-                if line.startswith('PRETTY_NAME='):
-                    info['distro'] = line.split('=')[1].strip().strip('"')
+                if line.startswith("PRETTY_NAME="):
+                    info["distro"] = line.split("=")[1].strip().strip('"')
                     break
     except FileNotFoundError:
-        info['distro'] = 'Unknown'
+        info["distro"] = "Unknown"
 
     return info
 
@@ -143,7 +134,7 @@ def check_i2c_enabled():
         return False
 
     # Check if /dev/i2c-1 exists
-    return Path('/dev/i2c-1').exists()
+    return Path("/dev/i2c-1").exists()
 
 
 def check_spi_enabled():
@@ -154,13 +145,13 @@ def check_spi_enabled():
         return False
 
     # Check if /dev/spidev0.0 exists
-    return Path('/dev/spidev0.0').exists()
+    return Path("/dev/spidev0.0").exists()
 
 
 def check_serial_enabled():
     """Check if serial/UART is enabled"""
     # Check if serial devices exist
-    serial_devices = ['/dev/serial0', '/dev/ttyAMA0', '/dev/ttyS0']
+    serial_devices = ["/dev/serial0", "/dev/ttyAMA0", "/dev/ttyS0"]
     return any(Path(dev).exists() for dev in serial_devices)
 
 
@@ -174,14 +165,14 @@ def check_config_overlay(overlay):
     Returns:
         bool: True if overlay is present and enabled
     """
-    config_paths = ['/boot/firmware/config.txt', '/boot/config.txt']
+    config_paths = ["/boot/firmware/config.txt", "/boot/config.txt"]
 
     for config_path in config_paths:
         if not Path(config_path).exists():
             continue
 
         try:
-            with open(config_path, 'r') as f:
+            with open(config_path, "r") as f:
                 for line in f:
                     line = line.strip()
                     if line == overlay:
@@ -196,24 +187,18 @@ def check_config_overlay(overlay):
 class SystemChecker:
     """Check system requirements for Enviro+"""
 
-    REQUIRED_APT_PACKAGES = [
-        'python3-cffi',
-        'libportaudio2'
-    ]
+    REQUIRED_APT_PACKAGES = ["python3-cffi", "libportaudio2"]
 
-    REQUIRED_OVERLAYS = [
-        'dtoverlay=pi3-miniuart-bt',
-        'dtoverlay=adau7002-simple'
-    ]
+    REQUIRED_OVERLAYS = ["dtoverlay=pi3-miniuart-bt", "dtoverlay=adau7002-simple"]
 
     def __init__(self):
         self.results = {}
 
     def check_all(self):
         """Run all system checks"""
-        print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
+        print(f"\n{Colors.BOLD}{'=' * 60}{Colors.RESET}")
         print(f"{Colors.BOLD}  Enviro+ System Requirements Check{Colors.RESET}")
-        print(f"{Colors.BOLD}{'='*60}{Colors.RESET}\n")
+        print(f"{Colors.BOLD}{'=' * 60}{Colors.RESET}\n")
 
         # System info
         info_data = get_os_info()
@@ -232,7 +217,7 @@ class SystemChecker:
         all_packages_ok = True
         for package in self.REQUIRED_APT_PACKAGES:
             installed = check_apt_package(package)
-            self.results[f'apt_{package}'] = installed
+            self.results[f"apt_{package}"] = installed
 
             if installed:
                 success(f"{package}: Installed")
@@ -247,9 +232,9 @@ class SystemChecker:
         spi_ok = check_spi_enabled()
         serial_ok = check_serial_enabled()
 
-        self.results['i2c'] = i2c_ok
-        self.results['spi'] = spi_ok
-        self.results['serial'] = serial_ok
+        self.results["i2c"] = i2c_ok
+        self.results["spi"] = spi_ok
+        self.results["serial"] = serial_ok
 
         if i2c_ok:
             success("I2C: Enabled")
@@ -272,7 +257,7 @@ class SystemChecker:
         overlays_ok = True
         for overlay in self.REQUIRED_OVERLAYS:
             status = check_config_overlay(overlay)
-            self.results[f'overlay_{overlay}'] = status
+            self.results[f"overlay_{overlay}"] = status
 
             if status is True:
                 success(f"{overlay}: Configured")
@@ -283,7 +268,7 @@ class SystemChecker:
                 overlays_ok = False
 
         # Summary
-        print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
+        print(f"\n{Colors.BOLD}{'=' * 60}{Colors.RESET}")
 
         all_ok = all_packages_ok and i2c_ok and spi_ok and overlays_ok
 
@@ -291,10 +276,10 @@ class SystemChecker:
             success("All requirements met! Your system is ready for Enviro+")
         else:
             warning("Some requirements are missing. Run with --install to configure.")
-            print(f"\nTo install and configure everything:")
-            print(f"  sudo enviroplus-setup --install")
+            print("\nTo install and configure everything:")
+            print("  sudo enviroplus-setup --install")
 
-        print(f"{Colors.BOLD}{'='*60}{Colors.RESET}\n")
+        print(f"{Colors.BOLD}{'=' * 60}{Colors.RESET}\n")
 
         return all_ok
 
@@ -322,9 +307,9 @@ class SystemInstaller:
             warning("Not running on Raspberry Pi - skipping hardware configuration")
             skip_hardware = True
 
-        print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
+        print(f"\n{Colors.BOLD}{'=' * 60}{Colors.RESET}")
         print(f"{Colors.BOLD}  Enviro+ System Setup{Colors.RESET}")
-        print(f"{Colors.BOLD}{'='*60}{Colors.RESET}\n")
+        print(f"{Colors.BOLD}{'=' * 60}{Colors.RESET}\n")
 
         # Update apt cache
         info("Updating package lists...")
@@ -391,9 +376,9 @@ class SystemInstaller:
             info("Configuring device tree overlays...")
             self._configure_overlays()
 
-        print(f"\n{Colors.BOLD}{'='*60}{Colors.RESET}")
+        print(f"\n{Colors.BOLD}{'=' * 60}{Colors.RESET}")
         success("Installation complete!")
-        print(f"{Colors.BOLD}{'='*60}{Colors.RESET}\n")
+        print(f"{Colors.BOLD}{'=' * 60}{Colors.RESET}\n")
 
         if not skip_hardware:
             warning("REBOOT REQUIRED for hardware changes to take effect")
@@ -404,7 +389,7 @@ class SystemInstaller:
 
     def _configure_overlays(self):
         """Configure device tree overlays in config.txt"""
-        config_paths = ['/boot/firmware/config.txt', '/boot/config.txt']
+        config_paths = ["/boot/firmware/config.txt", "/boot/config.txt"]
         config_path = None
 
         for path in config_paths:
@@ -427,7 +412,7 @@ class SystemInstaller:
             self.config_backup_done = True
 
         # Read current config
-        with open(config_path, 'r') as f:
+        with open(config_path, "r") as f:
             config_lines = f.readlines()
 
         modified = False
@@ -455,7 +440,7 @@ class SystemInstaller:
 
         if modified:
             # Write updated config
-            with open(config_path, 'w') as f:
+            with open(config_path, "w") as f:
                 f.writelines(config_lines)
             success("Device tree overlays configured")
         else:
@@ -465,7 +450,7 @@ class SystemInstaller:
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
-        description='Enviro+ Hardware Setup Tool',
+        description="Enviro+ Hardware Setup Tool",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -477,26 +462,14 @@ Notes:
   - System package installation requires sudo/root
   - Hardware configuration requires Raspberry Pi and sudo/root
   - A reboot is required after hardware configuration
-        """
+        """,
     )
 
-    parser.add_argument(
-        '--check',
-        action='store_true',
-        help='Check system requirements (default action)'
-    )
+    parser.add_argument("--check", action="store_true", help="Check system requirements (default action)")
 
-    parser.add_argument(
-        '--install',
-        action='store_true',
-        help='Install and configure everything (requires sudo)'
-    )
+    parser.add_argument("--install", action="store_true", help="Install and configure everything (requires sudo)")
 
-    parser.add_argument(
-        '--skip-hardware',
-        action='store_true',
-        help='Skip hardware configuration (with --install)'
-    )
+    parser.add_argument("--skip-hardware", action="store_true", help="Skip hardware configuration (with --install)")
 
     args = parser.parse_args()
 
@@ -521,9 +494,10 @@ Notes:
     except Exception as e:
         error(f"Unexpected error: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
