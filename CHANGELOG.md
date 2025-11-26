@@ -1,3 +1,9 @@
+1.0.4
+-----
+
+* **Setup**: Add udev rules configuration for serial devices
+* **Setup**: Add dialout group check for PMS5003 serial access
+
 1.0.3
 -----
 
