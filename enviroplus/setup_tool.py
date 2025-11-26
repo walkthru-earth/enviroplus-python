@@ -414,6 +414,9 @@ class SystemInstaller:
             else:
                 success(f"  → {user} already in dialout group")
 
+            # Configure udev rules for serial device permissions
+            self._configure_serial_udev_rules()
+
             print()
 
             # Configure device tree overlays
@@ -430,6 +433,28 @@ class SystemInstaller:
             print()
 
         return True
+
+    def _configure_serial_udev_rules(self):
+        """Configure udev rules for serial device permissions (dialout group access)"""
+        udev_rule_path = Path("/etc/udev/rules.d/99-serial.rules")
+        udev_rule_content = 'KERNEL=="ttyAMA0", GROUP="dialout", MODE="0660"\nKERNEL=="serial0", GROUP="dialout", MODE="0660"\n'
+
+        # Check if rule already exists with correct content
+        if udev_rule_path.exists():
+            existing_content = udev_rule_path.read_text()
+            if "dialout" in existing_content and "ttyAMA0" in existing_content:
+                success("  → Serial udev rules already configured")
+                return
+
+        info("  → Configuring serial device permissions (udev rules)...")
+        try:
+            udev_rule_path.write_text(udev_rule_content)
+            # Reload udev rules
+            run_command("udevadm control --reload-rules", capture=False)
+            run_command("udevadm trigger", capture=False)
+            success("    Serial udev rules configured")
+        except Exception as e:
+            error(f"    Failed to configure udev rules: {e}")
 
     def _configure_overlays(self):
         """Configure device tree overlays in config.txt"""
