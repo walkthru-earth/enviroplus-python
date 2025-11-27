@@ -6,8 +6,8 @@ Quick guide for contributing to `enviroplus-community`.
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/walkthru-earth/enviroplus-python.git
-cd enviroplus-python
+git clone https://github.com/walkthru-earth/enviroplus-community.git
+cd enviroplus-community
 
 # 2. Create virtual environment and install package
 uv venv
@@ -25,7 +25,7 @@ sudo reboot
 ## 📁 Project Structure
 
 ```
-enviroplus-python/
+enviroplus-community/
 ├── enviroplus/              # Main package
 │   ├── __init__.py         # Version info
 │   ├── gas.py              # MICS6814 gas sensor
@@ -313,8 +313,8 @@ mypy enviroplus/
 
 ## 💬 Getting Help
 
-- **Issues:** [GitHub Issues](https://github.com/walkthru-earth/enviroplus-python/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/walkthru-earth/enviroplus-python/discussions)
+- **Issues:** [GitHub Issues](https://github.com/walkthru-earth/enviroplus-community/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/walkthru-earth/enviroplus-community/discussions)
 - **Email:** yharby@walkthru.earth
 
 ---

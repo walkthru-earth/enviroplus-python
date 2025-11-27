@@ -107,7 +107,7 @@ def list_examples():
     if not examples_dir:
         warning("Could not find examples directory")
         print("\nThis usually means examples were not included in your installation.")
-        print("You can find examples at: https://github.com/pimoroni/enviroplus-python/tree/main/examples")
+        print("You can find examples at: https://github.com/pimoroni/enviroplus-community/tree/main/examples")
         return False
 
     print(f"\n{Colors.BOLD}{'=' * 70}{Colors.RESET}")
@@ -324,7 +324,7 @@ Examples:
   enviroplus-examples --path             Print examples directory path
 
 For more information:
-  https://github.com/pimoroni/enviroplus-python
+  https://github.com/pimoroni/enviroplus-community
         """,
     )
 

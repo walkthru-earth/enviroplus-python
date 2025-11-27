@@ -5,7 +5,7 @@
 
 **Environmental monitoring for Raspberry Pi** - Measure air quality (gases and particulates), temperature, pressure, humidity, light, and noise.
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/walkthru-earth/enviroplus-python/test.yml?branch=main)](https://github.com/walkthru-earth/enviroplus-python/actions/workflows/test.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/walkthru-earth/enviroplus-community/test.yml?branch=main)](https://github.com/walkthru-earth/enviroplus-community/actions/workflows/test.yml)
 [![PyPI](https://img.shields.io/pypi/v/enviroplus-community.svg)](https://pypi.org/project/enviroplus-community/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/enviroplus-community.svg)](https://pypi.org/project/enviroplus-community/)
 
@@ -127,7 +127,7 @@ while True:
 - `sensorcommunity.py` - Upload to Sensor.Community network
 - `noise-profile.py` - Noise measurement with frequency analysis
 
-[**See all examples →**](https://github.com/walkthru-earth/enviroplus-python/tree/main/enviroplus/examples)
+[**See all examples →**](https://github.com/walkthru-earth/enviroplus-community/tree/main/enviroplus/examples)
 
 ---
 
@@ -187,9 +187,9 @@ Amazing projects built by the community using Enviro+:
 
 ### Development Libraries
 - **[go-enviroplus](https://github.com/rubiojr/go-enviroplus)** - Go modules to read Enviro+ sensors
-- **[Enviro+ Example Projects](https://gitlab.com/dedSyn4ps3/enviroplus-python-projects)** - Includes original examples plus code to stream to Adafruit IO
+- **[Enviro+ Example Projects](https://gitlab.com/dedSyn4ps3/enviroplus-community-projects)** - Includes original examples plus code to stream to Adafruit IO
 
-**Got a project?** [Add it here →](https://github.com/walkthru-earth/enviroplus-python/issues)
+**Got a project?** [Add it here →](https://github.com/walkthru-earth/enviroplus-community/issues)
 
 ---
 
@@ -205,8 +205,8 @@ Need help getting started or troubleshooting?
 - **GPIO Pinout:** [pinout.xyz/enviro_plus](https://pinout.xyz/pinout/enviro_plus)
 
 ### Get Help
-- **GitHub Issues:** [Report bugs or request features](https://github.com/walkthru-earth/enviroplus-python/issues)
-- **GitHub Discussions:** [Ask questions and share ideas](https://github.com/walkthru-earth/enviroplus-python/discussions)
+- **GitHub Issues:** [Report bugs or request features](https://github.com/walkthru-earth/enviroplus-community/issues)
+- **GitHub Discussions:** [Ask questions and share ideas](https://github.com/walkthru-earth/enviroplus-community/discussions)
 - **Pimoroni Forums:** [Community support](https://forums.pimoroni.com/c/support)
 - **Discord:** [Join the conversation](https://discord.gg/hr93ByC)
 - **Email:** yharby@walkthru.earth (for opensensor.space integration)
@@ -225,8 +225,8 @@ Want to contribute? See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed setup inst
 
 ```bash
 # Clone repository
-git clone https://github.com/walkthru-earth/enviroplus-python.git
-cd enviroplus-python
+git clone https://github.com/walkthru-earth/enviroplus-community.git
+cd enviroplus-community
 
 # Create isolated environment
 uv venv
