@@ -1,3 +1,15 @@
+1.0.6
+-----
+
+* **Changelog**: Update changelog with missing entries
+
+1.0.5
+-----
+
+* **Repository Rename**: Renamed repository to `enviroplus-community`
+* **Documentation**: Updated all links to point to the new repository URL
+* **Version Bump**: Bumped version to 1.0.5
+
 1.0.4
 -----
 
